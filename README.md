@@ -23,3 +23,5 @@ for /r %i in (*.lastUpdated) do del %i
 ```
 
 Idea @Autowired 自动导包错误，到 settings -> inspections -> Spring -> Spring Core -> Code -> Autowiring for Bean class 勾去掉
+
+windows 版本的 git commit 要用**双引号**
