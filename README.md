@@ -31,3 +31,7 @@ windows 版本的 git commit 要用**双引号**
 1. mapper 实现 Mapper 接口
 1. bean 配置 mapper 注解 @Id,@GeneratedValue(strategy = GenerationType.IDENTITY)
 1. 修改启动文件的 MapperScan 引用
+
+> 传文件给树莓派 scp [本地文件路径] pi@host:[pi 下的目标路径]
+
+windows 下通过 ide 工具导入 sql 出现乱码，将文件传到树莓派 source 导入，没有乱码
