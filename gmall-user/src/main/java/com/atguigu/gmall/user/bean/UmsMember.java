@@ -1,5 +1,8 @@
 package com.atguigu.gmall.user.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 public class UmsMember {
@@ -24,6 +27,8 @@ public class UmsMember {
      * `luckey_count` int(11) DEFAULT NULL COMMENT '鍓╀綑鎶藉?娆℃暟',
      * `history_integration` int(11) DEFAULT NULL COMMENT '鍘嗗彶绉?垎鏁伴噺',
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String memberLevelId;
     private String username;

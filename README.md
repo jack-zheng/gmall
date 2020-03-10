@@ -25,3 +25,9 @@ for /r %i in (*.lastUpdated) do del %i
 Idea @Autowired 自动导包错误，到 settings -> inspections -> Spring -> Spring Core -> Code -> Autowiring for Bean class 勾去掉
 
 windows 版本的 git commit 要用**双引号**
+
+> tk: 通用方法整合
+1. 导入 dependency
+1. mapper 实现 Mapper 接口
+1. bean 配置 mapper 注解 @Id,@GeneratedValue(strategy = GenerationType.IDENTITY)
+1. 修改启动文件的 MapperScan 引用
