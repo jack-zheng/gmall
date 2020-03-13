@@ -3,9 +3,10 @@ package com.atguigu.gmall.bean;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
-public class UmsMember {
+public class UmsMember implements Serializable {
     /**
      * `id` bigint(20) NOT NULL AUTO_INCREMENT,
      * `member_level_id` bigint(20) DEFAULT NULL,

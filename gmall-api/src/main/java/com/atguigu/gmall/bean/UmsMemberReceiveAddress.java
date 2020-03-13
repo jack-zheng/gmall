@@ -1,6 +1,8 @@
 package com.atguigu.gmall.bean;
 
-public class UmsMemberReceiveAddress {
+import java.io.Serializable;
+
+public class UmsMemberReceiveAddress implements Serializable {
     /***
      *   id             bigint auto_increment
      *         primary key,
