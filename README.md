@@ -138,7 +138,7 @@ spring.dubbo.consumer.timeout=600000 # 指定超时时间
 
 spring.dubbo.consumer.check=false # 指定是否再 consumer 和 provider 里设置顺序检测
 
-## PMS 模块实现
+## P30-39 PMS 模块实现
 
 gmall-manage-service: 8071
 gmall-manage-web: 8081
@@ -183,3 +183,7 @@ application 启动文件中完了加 MapperScan 了
 {"timestamp":1584180223861,"status":500,"error":"Internal Server Error","exception":"org.thymeleaf.exceptions.TemplateInputException","message":"Error resolving template \"attrInfoList\", template might not exist or might not be accessible by any of the configured Template Resolvers","path":"/attrInfoList"}
 ```
 > Controller 对用的方法忘记添加 @ResponseBody 的注解了
+
+## P40-42 属性模块
+
+没什么新意，就是针对属性的增删改查
