@@ -19,4 +19,10 @@ public class SpuServiceImpl implements SpuService {
         info.setCatalog3Id(catalog3Id);
         return pmsProductInfoMapper.select(info);
     }
+
+    @Override
+    public String saveSpuInfo(PmsProductInfo pmsProductInfo) {
+        pmsProductInfoMapper.insertSelective(pmsProductInfo);
+        return "success";
+    }
 }
