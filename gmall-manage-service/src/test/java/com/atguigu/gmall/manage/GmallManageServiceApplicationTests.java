@@ -8,6 +8,8 @@ class GmallManageServiceApplicationTests {
 
     @Test
     void contextLoads() {
+//        ClientG
+//        ClientG
     }
 
 }

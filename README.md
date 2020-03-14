@@ -188,4 +188,15 @@ application 启动文件中完了加 MapperScan 了
 
 没什么新意，就是针对属性的增删改查
 
-## P43-51 SPU 模块开发
+## P43-50 SPU 模块开发
+
+没啥新意，唯一有价值的就是学习了一下怎么处理上传文件
+
+## P51-64 整合文件服务器 FastDFS
+
+安装讲的太罗嗦了直接参考我找到的这两篇文章，半小时肯定 OK 了
+
+* [官方文档](https://github.com/happyfish100/fastdfs/wiki)
+* [视频教程，不过要翻墙](https://www.youtube.com/watch?v=6Y2NihvPijQ)
+
+16年开始淘宝官方就已经提供了官方的 fdfs java 客户端了，就是用法和视频的不一样，参考下文档，还是可以用的
