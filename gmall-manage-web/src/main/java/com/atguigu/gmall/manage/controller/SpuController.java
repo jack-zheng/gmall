@@ -1,7 +1,9 @@
 package com.atguigu.gmall.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.atguigu.gmall.bean.PmsProductImage;
 import com.atguigu.gmall.bean.PmsProductInfo;
+import com.atguigu.gmall.bean.PmsProductSaleAttr;
 import com.atguigu.gmall.service.SpuService;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -23,9 +25,21 @@ public class SpuController {
     @Reference
     SpuService spuService;
     @Autowired
-    protected FastFileStorageClient storageClient;
+    FastFileStorageClient storageClient;
 
     protected static Logger LOGGER = LoggerFactory.getLogger(SpuController.class);
+
+    @RequestMapping("spuImageList")
+    @ResponseBody
+    public List<PmsProductImage> spuImageList(String spuId) {
+        return spuService.spuImageList(spuId);
+    }
+
+    @RequestMapping("spuSaleAttrList")
+    @ResponseBody
+    public List<PmsProductSaleAttr> spuSaleAttrList(String spuId) {
+        return spuService.spuSaleAttrList(spuId);
+    }
 
     @RequestMapping("spuList")
     @ResponseBody

@@ -1,10 +1,7 @@
 package com.atguigu.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.atguigu.gmall.bean.PmsProductImage;
-import com.atguigu.gmall.bean.PmsProductInfo;
-import com.atguigu.gmall.bean.PmsProductSaleAttr;
-import com.atguigu.gmall.bean.PmsProductSaleAttrValue;
+import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.manage.mapper.PmsProductImageMaper;
 import com.atguigu.gmall.manage.mapper.PmsProductInfoMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductSaleAttrMapper;
@@ -60,4 +57,27 @@ public class SpuServiceImpl implements SpuService {
         }
         return "success";
     }
+
+    @Override
+    public List<PmsProductSaleAttr> spuSaleAttrList(String spuId) {
+        PmsProductSaleAttr saleAttr = new PmsProductSaleAttr();
+        saleAttr.setProductId(spuId);
+        List<PmsProductSaleAttr> saleAttrs = pmsProductSaleAttrMapper.select(saleAttr);
+        for (PmsProductSaleAttr attr : saleAttrs) {
+            PmsProductSaleAttrValue target = new PmsProductSaleAttrValue();
+            target.setProductId(spuId);
+            target.setSaleAttrId(attr.getSaleAttrId());
+            List<PmsProductSaleAttrValue> list = pmsProductSaleAttrValueMapper.select(target);
+            attr.setSpuSaleAttrValueList(list);
+        }
+        return saleAttrs;
+    }
+
+    @Override
+    public List<PmsProductImage> spuImageList(String spuId) {
+        PmsProductImage image = new PmsProductImage();
+        image.setProductId(spuId);
+        return pmsProductImageMaper.select(image);
+    }
+
 }
