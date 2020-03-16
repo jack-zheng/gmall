@@ -57,7 +57,9 @@ public class SpuController {
     @RequestMapping("fileUpload")
     @ResponseBody
     public String fileUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        String prefix = "http://192.168.1.106:8888/";
         StorePath path = storageClient.uploadFile(multipartFile.getInputStream(), multipartFile.getSize(), FilenameUtils.getExtension(multipartFile.getOriginalFilename()), null);
-        return path.getFullPath();
+
+        return prefix + path.getFullPath();
     }
 }

@@ -207,10 +207,16 @@ application 启动文件中完了加 MapperScan 了
 
 Idea 自带的 database 最多只能显示 500 条数据还以为自己代码写错了，查了半天，干。不过顺便查到了 mybaties 的显示sql配置
 
-## 71- thymeleave
+## 71-84 thymeleave 实现 item 模块
+
+gmall-item-web 前台商品详情, 端口 8082
 
 前台访问压力更大，可以使用限流，缓存来提高效率
 
 系统小直接用 session 管理会话，系统大了直接用 redis 代替 session 进行对话
 
 session： browser 和 jvm 交互式存储临时数据的对象
+
+Ctrl + Shift + F9 刷新提交页面
+
+马马虎虎，基本是抄完的。 这个项目的 db 设计的太次了，不是很感兴趣，还是其他两个项目的好
