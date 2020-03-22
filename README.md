@@ -220,3 +220,88 @@ session： browser 和 jvm 交互式存储临时数据的对象
 Ctrl + Shift + F9 刷新提交页面
 
 马马虎虎，基本是抄完的。 这个项目的 db 设计的太次了，不是很感兴趣，还是其他两个项目的好
+
+## P85-90 item hash 实现，没什么意思
+
+## P91-108 Redis
+
+整合步骤
+
+1. redis 整合到 spring
+1. 设计数据存储策略，redis 存储策略：[数据对象：数据对象id: 对象属性]
+
+controller -> redies -> db redis 起到一个缓冲垫的作用
+
+### 安装
+
+```cmd
+sudo apt-get update
+
+sudo apt-get install redis-server
+
+# 启动服务
+redis-server
+
+# 查看服务, 默认端口 6379
+redis-cli
+
+# 设置值
+set k1 hello-redis
+
+# 取值
+get k1
+
+# 配置文件路径
+/etc/redis/redis.conf
+
+/etc/init.d/redis-server stop 
+/etc/init.d/redis-server start 
+/etc/init.d/redis-server restart
+
+# 删除数据
+flushdb
+
+del *
+```
+
+### 整合
+
+1. 引入pom依赖
+1. 写 redis 工具类，redis pool 初始化
+1. 写 spring 整合 redis 配置类，将 redis 初始化 到 spring 容器中
+1. 每个应用工程引入 service-util 后需要单独配置 redis 信息
+
+* redis 由于是装在树莓派里面的，所以需要再 conf 里面开放 ip， pc 才能访问到
+* 注意添加了配置之后，application 启动文件的位置，不然可能加载不到
+
+### Redis 常见问题
+
+这些问题其实本质都是一样的，就是缓存失效，压力重新回到 db 层
+
+* redis 缓存穿透：利用缓存漏洞，比如访问一个不存在的 id, 绕过 redis 直接给 db 造成压力。
+    - 可在实现层直接写业务逻辑实现阻挡，给这种query 设置返回值
+* redis 缓存击穿：某个 key 高并发下突然失效（比如过期）导致大量访问直接给到 db 层
+    - 加锁
+* redis 缓存雪崩：key 过期时间设置在同一时间，导致缓存同时失效，db 瞬间压力过大，崩溃
+    - 设置不同的过期时间
+    
+### redis 分布式锁
+
+1. redisson 框架, 自带 JUC 实现
+1. redis 自带的分布式锁， set ex nx， 这个redis 一般要单独配
+
+> set sku:111:lock 1 px 10000 nx  # 设置锁，过期时间 10s   
+> del sku:111:lock  ## 删除锁 
+
+* 线程删除锁前一刻，锁过期了，这个线程会继续去删除锁，这就但是下一个线程的锁被删了，怎么避免
+    - 通过 set lock 的时候设置 token 来避免
+* 在加了 token 的情况下，在查询的时候还没有过期，但是执行时过期了，怎么办
+    - 可以用 LUA 语言减小执行语句的时间差，基本上达到 查询和删除同时执行
+    
+Idea run config, allow parallel run 可以为同一个service 起多个 instance
+
+可以通过 apache 的 ab 工具做压力测试，类似的工具还有一个叫 jmeter 的
+
+### P110-121 ES search
+
+ES search 要求设备内存 >2G, 树莓派只有 1G，装不了
