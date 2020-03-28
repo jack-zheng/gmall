@@ -111,6 +111,21 @@ public class SkuServiceImpl implements SkuService {
         return pmsSkuInfo;
     }
 
+    @Override
+    public List<PmsSkuInfo> getAllSku() {
+        List<PmsSkuInfo> pmsSkuInfos = pmsSkuInfoMapper.selectAll();
+        for (PmsSkuInfo pmsSkuInfo : pmsSkuInfos) {
+            String skuId = pmsSkuInfo.getId();
+
+            PmsSkuAttrValue pmsSkuAttrValue = new PmsSkuAttrValue();
+            pmsSkuAttrValue.setSkuId(skuId);
+            List<PmsSkuAttrValue> select = pmsSkuAttrValueMapper.select(pmsSkuAttrValue);
+
+            pmsSkuInfo.setSkuAttrValueList(select);
+        }
+        return pmsSkuInfos;
+    }
+
     public PmsSkuInfo getSkuByIdFromDb(String skuId){
         // sku商品对象
         PmsSkuInfo pmsSkuInfo = new PmsSkuInfo();

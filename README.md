@@ -302,6 +302,146 @@ Idea run config, allow parallel run 可以为同一个service 起多个 instance
 
 可以通过 apache 的 ab 工具做压力测试，类似的工具还有一个叫 jmeter 的
 
-### P110-121 ES search
+### P110-128 ES search
 
-ES search 要求设备内存 >2G, 树莓派只有 1G，装不了
+ES search 要求设备内存 >2G, 树莓派只有 1G，装不了。选择在 windows 上安装
+
+去到 elastic search 的官方网站，下载 ES 和 kibana 的安装包，下载解压后可直接运行，步骤相当直接，文档也很详细
+
+elastic search 访问地址 ip:9200, java 访问端口 9300
+
+kibana 地址：ip: 5601
+
+```query_sample
+GET movie_index/_search
+{
+  "query": {
+    "match": {
+      "name": "red"
+    }
+  }
+}
+```
+
+中文分词器，安装 IK 分词器，支持中英文分词，放到 ES search 下面的 plugins 文件夹下
+
+插件地址： [Git](https://github.com/medcl/elasticsearch-analysis-ik), 可以离线安装，5.5.1 版本后也支持通过 cmd 安装了
+
+```search
+GET _analyze
+{
+  "analyzer": "ik_smart", 
+  "text": "红海行动"
+}
+```
+集群配置只是听了一下，不准备实践，单节点就够完成项目了。
+
+主节点负责集群管理，任务分发，不负责文档增删改查
+
+片时 es 的实际物理存储单元
+
+索引时 es 的逻辑单元，一个所以一般建立在多个不同机器的分片上
+
+复制片，每个机器的分片一般在其他机器上都有2-3个复制片
+
+一旦集群的耨写机器发生故障，那么剩余的机器会在主节点的管理下，重新分配资源
+
+## P129-152 search 功能实现
+
+ES7 里mapping 已经**被移除**了，为了省事，我还是重新安装一个 ES6吧
+
+ES6.x 不支持 Java version above 11...
+
+```es
+PUT /gmall
+{
+  "mappings": {
+    "PmsSkuInfo": {
+      "properties": {
+        "id": {
+          "type": "keyword",
+          "index": true
+        },
+        "skuName": {
+          "type": "text",
+          "analyzer": "ik_max_word"
+        },
+        "skuDesc": {
+          "type": "text",
+          "analyzer": "ik_smart"
+        },
+        "catalog3Id": {
+          "type": "keyword"
+        },
+        "price": {
+          "type": "double"
+        },
+        "skuDefaultImage": {
+          "type": "keyword",
+          "index": false
+        },
+        "hotScore": {
+          "type": "double"
+        },
+        "productId": {
+          "type": "text"
+        },
+        "skuAttrValueList": {
+          "properties": {
+            "attrId": {
+              "type": "keyword"
+            },
+            "valueId": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+gmall-search-web: 8083
+gmall-search-service: 8074
+
+取类名的i时候用业务关键字而不是技术， 比如 redis 什么的用 cache 代替
+
+先过滤后搜索效率高 query {bool + must}
+
+测试 query
+
+```query
+GET gmall/PmsSkuInfo/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {"term": {"skuAttrValueList.valueId": "49"}},
+        {"term": {"skuAttrValueList.valueId": "43"}}
+        ],
+      "must": [
+        {
+          "match": {
+            "skuName": "小米"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+ES 的聚合函数执行效率比较低， aggs 统计重复的字段的数量
+
+
+P141, 使用 sql 实现查询去重效果，后面的url 和 面包屑 url 的实现挺有意思，不过没什么新意，没什么意外的话，打算看看视频过了
+
+## P153-P166 购物车
+
+实现时需要考虑的点：
+
+1. 在不登陆的情况下，也可以使用 - cookie
+1. 登录的情况下，使用 mysql, redis 存储数据， redis 作为购物车缓存
+1. 在缓存的情况下，或者用户已经添加购物车后，允许购物车中的数据和原始商品数据的不一致。 - 对应商品过期之后，购物车里是否需要保留该产品的情况
+1. 购物车同步问题 - 什么时候同步，登录+结算；同步后是否删除 cookie中数据，需要。
+1. 用户在不同客户端同时登录，如何处理购物车数据
