@@ -467,4 +467,42 @@ hget user:1:cart 116
 
 BigDecimal 用字符串初始化靠谱， 浮点，双精度会有精度丧失
 
-162
+## P167- 用户认证
+
+gmall-passport-web 用户认证
+gmall-user-service 用户服务 8070
+
+知识点： 拦截器,跨域，单点登录
+
+JSession + session + redis pool: 性能不高，安全性差 -> 发展为 -> Token + redis pool, 去除中间层，也更安全， 不过也过时了？！！
+
+最新的解决方案， JWT 通过加密/解密 实现用户验证，省去了 redis 访问链接，更高效，但是对验证的安全性要求也更高
+
+```exception
+跑JWT 测试的时候跑错
+Exception in thread "main" java.lang.NoClassDefFoundError: javax/xml/bind/DatatypeConverter
+
+是因为 java 9 之后一些包 deprecate 了，你可以降到 java8 或者添加一些额外的引用到 pom 中
+
+<dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.0</version>
+</dependency>
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-impl</artifactId>
+    <version>2.3.0</version>
+</dependency>
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-core</artifactId>
+    <version>2.3.0</version>
+</dependency>
+<dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1.1</version>
+</dependency>
+```
+P176 over
