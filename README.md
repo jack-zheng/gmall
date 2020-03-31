@@ -403,7 +403,7 @@ PUT /gmall
 ```
 
 gmall-search-web: 8083
-gmall-search-service: 8074
+gmall-search-service: 8073
 
 取类名的i时候用业务关键字而不是技术， 比如 redis 什么的用 cache 代替
 
@@ -438,6 +438,11 @@ P141, 使用 sql 实现查询去重效果，后面的url 和 面包屑 url 的�
 
 ## P153-P166 购物车
 
+gmall-cart-web: 8084
+gmall-cart-service: 8074
+
+为了完成这个实验你必须去 hosts 文件中建立 ip-host 的映射，不然 cookie 设置会出问题
+
 实现时需要考虑的点：
 
 1. 在不登陆的情况下，也可以使用 - cookie
@@ -445,3 +450,21 @@ P141, 使用 sql 实现查询去重效果，后面的url 和 面包屑 url 的�
 1. 在缓存的情况下，或者用户已经添加购物车后，允许购物车中的数据和原始商品数据的不一致。 - 对应商品过期之后，购物车里是否需要保留该产品的情况
 1. 购物车同步问题 - 什么时候同步，登录+结算；同步后是否删除 cookie中数据，需要。
 1. 用户在不同客户端同时登录，如何处理购物车数据
+
+cookie 操作时副本操作，server 端改了需要覆盖浏览器端的值，session 时值引用，getSessionId 可见一斑
+
+只需要启动 manage service 和 item web 就行了
+
+ssh pi@192.168.1.106 - raspberry 链接树莓派， redis-cli 打开 redis 客户端
+
+```redis
+# 显示所有可用 key
+keys *
+
+# 拿到 id 为 116 的map 信息
+hget user:1:cart 116
+```
+
+BigDecimal 用字符串初始化靠谱， 浮点，双精度会有精度丧失
+
+162
