@@ -34,4 +34,14 @@ public class UserServiceImpl implements UserService {
         example.createCriteria().andEqualTo("memberId", id);
         return addressMapper.selectByExample(example);
     }
+
+    @Override
+    public UmsMember login(UmsMember umsMember) {
+        return null;
+    }
+
+    @Override
+    public void addUserToken(String token, String memberId) {
+
+    }
 }
