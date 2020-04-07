@@ -467,9 +467,9 @@ hget user:1:cart 116
 
 BigDecimal 用字符串初始化靠谱， 浮点，双精度会有精度丧失
 
-## P167- 用户认证
+## P167-189 用户认证
 
-gmall-passport-web 用户认证
+gmall-passport-web 用户认证 8085
 gmall-user-service 用户服务 8070
 
 知识点： 拦截器,跨域，单点登录
@@ -518,4 +518,15 @@ Exception in thread "main" java.lang.NoClassDefFoundError: javax/xml/bind/Dataty
 
 在我的应用，应用信息 的高级信息里面可以设置 OAuth2 的授权信息
 
+## P203-217 订单
 
+gmall-order-web 8086
+gmall-order-service 8076
+
+test/202cb962ac59075b964b07152d234b70
+
+系统暂时只支持从 search-web 页面登录。。。 前面 cookie 处理有问题，我没有在 host 里面使用 domain 的方式倒是结算页面 cookie 合并出问题了，为了省事直接改了 cartController 里的 code 
+
+cache 会导致后面一系列的问题，这个 service 应该完不成了，不过听了课，大致的要点好事get 了，主要是业务上面的一些注意点。什么 redis 使用 rula 处理高并发啊，提交订单要删除购物车里的数据啊，还有订单计算的时候要从server 端拿数据统计，而不是客户端啦之类的。
+
+没什么新东西，先看支付吧，比较有意思，有必要回头再补回来吧。

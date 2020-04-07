@@ -25,7 +25,7 @@ public class UmsMemberReceiveAddress implements Serializable {
     private String province;
     private String city;
     private String region;
-    private String detail_address;
+    private String detailAddress;
 
     public String getId() {
         return id;
@@ -99,11 +99,11 @@ public class UmsMemberReceiveAddress implements Serializable {
         this.region = region;
     }
 
-    public String getDetail_address() {
-        return detail_address;
+    public String getDetailAddress() {
+        return detailAddress;
     }
 
-    public void setDetail_address(String detail_address) {
-        this.detail_address = detail_address;
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
     }
 }
