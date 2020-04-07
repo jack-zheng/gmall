@@ -505,4 +505,17 @@ Exception in thread "main" java.lang.NoClassDefFoundError: javax/xml/bind/Dataty
     <version>1.1.1</version>
 </dependency>
 ```
-P189 over
+
+## P190-202 社交帐号登录-新浪
+
+授权流程：
+
+1. 本站提供链接导向到授权站点
+1. 授权方提供授权成功的 token
+1. 通过 token 去资源站点提取信息
+
+微博开放平台 -> 微链接 -> 网站接入 -> 立即接入 -> 输入信息，通过邮箱验证 -> 在进入立即接入，创建应用，拿到 app key 和 app secret
+
+在我的应用，应用信息 的高级信息里面可以设置 OAuth2 的授权信息
+
+

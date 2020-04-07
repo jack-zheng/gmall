@@ -74,6 +74,19 @@ public class UserServiceImpl implements UserService {
         jedis.close();
     }
 
+    @Override
+    public UmsMember addOauthUser(UmsMember umsMember) {
+        userMapper.insertSelective(umsMember);
+
+        return umsMember;
+    }
+
+    @Override
+    public UmsMember checkOauthUser(UmsMember umsCheck) {
+        UmsMember umsMember = userMapper.selectOne(umsCheck);
+        return umsMember;
+    }
+
     private UmsMember loginFromDb(UmsMember umsMember) {
         List<UmsMember> umsMembers = userMapper.select(umsMember);
 
