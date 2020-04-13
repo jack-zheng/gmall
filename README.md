@@ -530,3 +530,91 @@ test/202cb962ac59075b964b07152d234b70
 cache 会导致后面一系列的问题，这个 service 应该完不成了，不过听了课，大致的要点好事get 了，主要是业务上面的一些注意点。什么 redis 使用 rula 处理高并发啊，提交订单要删除购物车里的数据啊，还有订单计算的时候要从server 端拿数据统计，而不是客户端啦之类的。
 
 没什么新东西，先看支付吧，比较有意思，有必要回头再补回来吧。
+
+## P218-233 支付
+
+这个模块需要整合支付宝的账号，需要有公司的支付宝账号才能实现，大致了解了一下怎么coding, 有机会再实操一波吧。
+
+搜了一下，应该是有第三方接口实现这样的功能的，有需要可以再找找，实在不行注册一家公司不就完了，好像用不了几个钱。
+
+## P234-240 消息队列科普
+
+分布式事务解决方案：
+
+1. xa 协议下的两段式提交 - 事务协调器
+1. xa 进阶版， tcc - try-confirm-cancel, 入侵性太强
+1. 基于消息的，采取最终一致性策略的分布式事务 - mq
+
+Topic 不持久化，Queue 可以持久化。因为 Topic 不能标记状态。
+
+## P241-259 MQ整合
+
+## P260-266 秒杀
+
+* 服务器容量 - 最大连接数
+* 服务器流量 - 单位时间最大请求数： 漏桶算法和令牌桶算法
+
+## P272- 数据库高级
+
+SQL 解析顺序： from - on - join - where - group by - having - select - order by -limit, order 也挺费性能的
+
+50w 一下的数据，index 是没必要的
+
+index: 一种数据结构，B tree， balance tree.
+
+单值索引，唯一索引，复合索引
+
+explain 关键字，模拟执行SQL语句
+
+id, select_type, table, type, possible_keys, key, key_len, ref, rows, Extra
+
+id: 查询顺序，值越大的先执行
+
+select_type: simple-单表, primary-主查询, subquery-子查询, derived-衍生, union-联合查询, union result 
+
+tyle: system>const>eq_ref>ref>range>index>all, 使用的索引类型
+
+ref: 关联索引是什么
+
+key_len: 越短越好
+
+order: 避免使用 using filesort, Using temporary. 符合索引建立和使用是，尽量考虑在用户查询时，常用的排序方向和字段组合顺序。
+
+充分使用索引，顺序和索引一致
+
+* 全值匹配我最爱
+* 最佳左前缀法则
+* 不在索引列上做任何操作（计算，函数，自动/手动类型转化），会导致索引失效二转向全表扫描
+* 存储引擎不能使用索引范围条件右边的列
+* 尽量使用覆盖索引，减少 select * 
+* mysql 在使用不等于（！= / <>） 的时候有时候会无法使用索引会导致全表扫描
+* 注意 null/ not null 对索引的可能影响
+*  like 以通配符开头（%jack）， mysql 索引会失效，全表扫描
+* 字符串不加单引号索引会失效
+* 使用 or 会导致索引失效
+
+全职匹配我最爱，最左前缀要遵循；  
+到头大哥不能死，中间兄弟不能断；  
+索引列上少计算，范围之后全失效；  
+like 百分写最右，腐败索引不写*；  
+不等空值还有or, 索引影响要注意；  
+var 引号不可丢， SQL 优化有诀窍；  
+
+### 表锁
+
+* 偏读型数据库用表锁 ISAM type, lock table name read.
+* 解锁： unlock tables; 必定是所有表一起解锁的，和 transaction 类似
+* 读锁可以共享，写锁互斥
+
+### 行锁
+
+* 偏想 InnoDB type
+* 关闭 autocommit, select sql + for update, update sql; 这是一个悲观锁
+* 读读互斥
+
+* 无索引操作时，行锁升级为表锁！！！
+* 间隙锁
+
+### 死锁
+
+彼此占用了对方的钥匙
